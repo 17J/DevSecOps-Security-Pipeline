@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  # namespace: default # Replace with your namespace
+  labels:
+    app: backend
+spec:
+  replicas: 1 # Adjust as needed
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend-container
+          image: 17rj/perfume-ecom-mern-backend:latest # Replace with your backend image
+          ports:
+            - containerPort: 5000 # Your backend server port
+          env:
+            - name: NODE_ENV
+              value: "development"
+            - name: PORT
+              value: "5000"
+            - name: MONGO_URI
+              value: "mongodb://mongo-service:27017/"
+            - name: JWT_SECRET
+              value: "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTc0NDg2NjA3NCwiaWF0IjoxNzQ0ODY2MDc0fQ.fsUmxSXP_tEYjmV6d_-wcykDeLRUd2bThNEOBb7NhcU"
+            - name: JWT_EXPIRES_IN
+              value: "7d"
+            - name: DB_NAME
+              value: "foodmore"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+  # namespace: <your-namespace> # Replace with your namespace
+  labels:
+    app: backend
+spec:
+  selector:
+    app: backend
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+  type: ClusterIP # Accessible only within the cluster
