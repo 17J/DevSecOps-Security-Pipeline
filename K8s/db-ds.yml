@@ -1,5 +1,5 @@
 ---
-# Mongo Deployment 
+# Mongo Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16,27 +16,27 @@ spec:
         app: mongo
     spec:
       containers:
-      - image: mongo:8
-        name: mongo
-        env:
-        - name: MONGO_INITDB_ROOT_USERNAME
-          value: "root"
-        - name: MONGO_INITDB_ROOT_PASSWORD
-          value: "Test@123"
-        - name: MONGO_INITDB_DATABASE
-          value: "foodmore"
-        ports:
-        - containerPort: 27017
+        - image: mongo:8
           name: mongo
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              value: "root"
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              value: "Test@123"
+            - name: MONGO_INITDB_DATABASE
+              value: "foodmore"
+          ports:
+            - containerPort: 27017
+              name: mongo
 ---
-# Mongo Service 
+# Mongo Service
 apiVersion: v1
 kind: Service
 metadata:
   name: mongo-service
 spec:
   ports:
-  - port: 27017
-    targetPort: 27017
+    - port: 27017
+      targetPort: 27017
   selector:
     app: mongo
